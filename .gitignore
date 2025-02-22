@@ -1,6 +1,27 @@
 .DS_Store
 */.DS_Store
 
+# Virtual environment
+env/
+venv/
 .venv
 .ipynb_checkpoints
 .ipynb_checkpoints/
+
+# Python bytecode cache
+__pycache__/
+*.pyc
+
+# TensorFlow logs
+milestones/training_logs/
+milestones/model_checkpoints/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Datasets
+milestones/datasets/food-101
+
+# Other common ignores
+*.log
+*.tmp
