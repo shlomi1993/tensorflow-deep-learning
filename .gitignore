@@ -1,6 +1,9 @@
 .DS_Store
 */.DS_Store
 
+# GitHub
+.github
+
 # Virtual environment
 env/
 venv/
