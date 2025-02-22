@@ -18,7 +18,8 @@ def main() -> None:
         5. Evaluate and save the model.
         6. Load the saved model and verify its performance.
     """
-    print(f"Using TensorFlow version {tf.__version__}\nUsing devices: {tf.config.list_physical_devices()}")
+    device_names = [device.name for device in tf.config.list_physical_devices()]
+    print(f"Using TensorFlow version {tf.__version__}\nUsing devices: {device_names}")
 
     pipeline = Food101Pipeline()
 
@@ -35,7 +36,7 @@ def main() -> None:
     print(f"Evaluation accuracy: {accuracy * 100:.2f}%")
 
     save_dir = "efficientnetb0_feature_extract_model_mixed_precision"
-    import ipdb; ipdb.set_trace(context=11)
+
     pipeline.save_model(model, save_dir)
 
     loaded_model = pipeline.load_model(save_dir)

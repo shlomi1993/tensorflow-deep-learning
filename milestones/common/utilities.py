@@ -14,6 +14,7 @@ import tensorflow as tf
 
 from typing import List, Tuple, Dict, Union, Optional
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_recall_fscore_support
+from tensorflow import keras
 
 
 def load_and_prep_image(filename: str, img_size: Tuple[int, int] = 224, scale: bool = True) -> tf.Tensor:
@@ -88,12 +89,12 @@ def make_confusion_matrix(
         fig.savefig("confusion_matrix.png")
 
 
-def pred_and_plot(model: tf.keras.Model, filename: str, class_names: List[str]) -> None:
+def pred_and_plot(model: keras.Model, filename: str, class_names: List[str]) -> None:
     """
     Predicts and visualizes the prediction on a single image.
 
     Args:
-        model (tf.keras.Model): Trained TensorFlow model.
+        model (keras.Model): Trained TensorFlow model.
         filename (str): Path to the image file.
         class_names (List[str]): List of class names.
 
@@ -110,7 +111,7 @@ def pred_and_plot(model: tf.keras.Model, filename: str, class_names: List[str]) 
     plt.axis(False)
 
 
-def create_tensorboard_callback(dir_name: str, experiment_name: str) -> tf.keras.callbacks.TensorBoard:
+def create_tensorboard_callback(dir_name: str, experiment_name: str) -> keras.callbacks.TensorBoard:
     """
     Creates a TensorBoard callback instance to log training metrics.
 
@@ -119,19 +120,19 @@ def create_tensorboard_callback(dir_name: str, experiment_name: str) -> tf.keras
         experiment_name (str): Experiment name.
 
     Returns:
-        tf.keras.callbacks.TensorBoard: TensorBoard callback instance.
+        keras.callbacks.TensorBoard: TensorBoard callback instance.
     """
     log_dir = f"{dir_name}/{experiment_name}/{datetime.datetime.now().strftime('%Y%m%d-%H%M%S')}"
     print(f"Saving TensorBoard logs to: {log_dir}")
-    return tf.keras.callbacks.TensorBoard(log_dir=log_dir)
+    return keras.callbacks.TensorBoard(log_dir=log_dir)
 
 
-def plot_loss_curves(history: tf.keras.callbacks.History) -> None:
+def plot_loss_curves(history: keras.callbacks.History) -> None:
     """
     Plots training and validation loss and accuracy curves.
 
     Args:
-        history (tf.keras.callbacks.History): TensorFlow model History object.
+        history (keras.callbacks.History): TensorFlow model History object.
 
     Returns:
         None
@@ -154,16 +155,16 @@ def plot_loss_curves(history: tf.keras.callbacks.History) -> None:
 
 
 def compare_histories(
-    original_history: tf.keras.callbacks.History,
-    new_history: tf.keras.callbacks.History,
+    original_history: keras.callbacks.History,
+    new_history: keras.callbacks.History,
     initial_epochs: int = 5
 ) -> None:
     """
     Compares training histories of models.
 
     Args:
-        original_history (tf.keras.callbacks.History): History object from initial training.
-        new_history (tf.keras.callbacks.History): History object from continued training.
+        original_history (keras.callbacks.History): History object from initial training.
+        new_history (keras.callbacks.History): History object from continued training.
         initial_epochs (int): Initial epochs for plotting adjustment.
 
     Returns:

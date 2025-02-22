@@ -2,7 +2,8 @@ import tensorflow as tf
 import tensorflow_datasets as tfds
 
 from typing import Tuple
-from tensorflow.keras import layers
+from tensorflow import keras
+from keras import layers
 
 from common.utilities import create_tensorboard_callback
 
@@ -87,14 +88,14 @@ class Food101Pipeline:
         self.test_data = self.test_data.map(map_func=self.preprocess_image, num_parallel_calls=tf.data.AUTOTUNE)
         self.test_data = self.test_data.batch(self.batch_size).prefetch(tf.data.AUTOTUNE)
 
-    def build_model(self) -> tf.keras.Model:
+    def build_model(self) -> keras.Model:
         """
         Builds a TensorFlow model using EfficientNetB0 as the base.
 
         Returns:
-            tf.keras.Model: The compiled TensorFlow model.
+            keras.Model: The compiled TensorFlow model.
         """
-        base_model = tf.keras.applications.EfficientNetB0(include_top=False)
+        base_model = keras.applications.EfficientNetB0(include_top=False)
         base_model.trainable = False
 
         inputs = layers.Input(shape=self.img_shape, name="input_layer")
@@ -103,26 +104,26 @@ class Food101Pipeline:
         x = layers.Dense(len(self.class_names))(x)
         outputs = layers.Activation("softmax", dtype=tf.float32, name="softmax_float32")(x)
 
-        model = tf.keras.Model(inputs, outputs)
+        model = keras.Model(inputs, outputs)
         model.compile(
             loss="sparse_categorical_crossentropy",
-            optimizer=tf.keras.optimizers.Adam(),
+            optimizer=keras.optimizers.Adam(),
             metrics=["accuracy"]
         )
         return model
 
-    def train_model(self, model: tf.keras.Model, epochs: int = 3) -> tf.keras.callbacks.History:
+    def train_model(self, model: keras.Model, epochs: int = 3) -> keras.callbacks.History:
         """
         Trains the model using the training dataset.
 
         Args:
-            model (tf.keras.Model): The model to train.
+            model (keras.Model): The model to train.
             epochs (int): Number of training epochs. Defaults to 3.
 
         Returns:
-            tf.keras.callbacks.History: Training history object.
+            keras.callbacks.History: Training history object.
         """
-        checkpoint_cb = tf.keras.callbacks.ModelCheckpoint(
+        checkpoint_cb = keras.callbacks.ModelCheckpoint(
             self.checkpoint_path,
             monitor="val_accuracy",
             save_best_only=True,
@@ -142,29 +143,29 @@ class Food101Pipeline:
         )
         return history
 
-    def evaluate_model(self, model: tf.keras.Model) -> list[float]:
+    def evaluate_model(self, model: keras.Model) -> list[float]:
         """
         Evaluates the model on the testing dataset.
 
         Args:
-            model (tf.keras.Model): The model to evaluate.
+            model (keras.Model): The model to evaluate.
 
         Returns:
             list[float]: Evaluation metrics.
         """
         return model.evaluate(self.test_data)
 
-    def save_model(self, model: tf.keras.Model, save_dir: str) -> None:
+    def save_model(self, model: keras.Model, save_dir: str) -> None:
         """
         Saves the trained model to the specified directory.
 
         Args:
-            model (tf.keras.Model): The model to save.
+            model (keras.Model): The model to save.
             save_dir (str): Directory path to save the model.
         """
         model.save(save_dir)
 
-    def load_model(self, save_dir: str) -> tf.keras.Model:
+    def load_model(self, save_dir: str) -> keras.Model:
         """
         Loads a saved model from the specified directory.
 
@@ -172,6 +173,6 @@ class Food101Pipeline:
             save_dir (str): Directory path to load the model from.
 
         Returns:
-            tf.keras.Model: The loaded TensorFlow model.
+            keras.Model: The loaded TensorFlow model.
         """
-        return tf.keras.models.load_model(save_dir)
+        return keras.models.load_model(save_dir)
