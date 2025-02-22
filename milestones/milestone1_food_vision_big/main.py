@@ -18,11 +18,11 @@ def main() -> None:
         5. Evaluate and save the model.
         6. Load the saved model and verify its performance.
     """
-    print(f"Using TensorFlow version {tf.__version__}")
+    print(f"Using TensorFlow version {tf.__version__}\nUsing devices: {tf.config.list_physical_devices()}")
 
     pipeline = Food101Pipeline()
 
-    pipeline.load_data("milestones/datasets/food101")
+    pipeline.load_data("datasets/food-101")
     pipeline.prepare_data()
     model = pipeline.build_model()
     model.summary()
